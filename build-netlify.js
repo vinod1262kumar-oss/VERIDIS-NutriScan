@@ -16,6 +16,7 @@ const allowedFiles = [
   'navigation.js',
   'config.json',
   'site-interactions.js',
+  'supabase-config.js',
 ];
 
 fs.rmSync(out, { recursive: true, force: true });

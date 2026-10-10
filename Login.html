@@ -72,12 +72,12 @@
 </button>
 </div>
 <!-- Primary Credentials Form -->
-<form class="flex flex-col gap- space-md" onsubmit="event.preventDefault(); triggerAuth();">
+<form id="auth-form" class="flex flex-col gap-space-md">
 <!-- Field 1: Biometric ID / Email -->
 <div class="flex flex-col gap-1.5">
 <div class="flex justify-between items-center">
 <label class="font-label-mono text-label-mono text-on-surface uppercase tracking-wider flex items-center gap-1.5" for="clinical-id">
-<span>BIOMETRIC IDENTIFIER // CLINICAL EMAIL</span>
+<span>EMAIL ADDRESS</span>
 </label>
 <span class="font-label-mono-xs text-label-mono-xs text-outline">SECURE FIELD</span>
 </div>
@@ -85,14 +85,14 @@
 <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-outline group-focus-within:text-primary-container transition-colors">
 <span class="material-symbols-outlined text-lg">fingerprint</span>
 </div>
-<input class="w-full pl-10 pr-4 py-3 bg-surface-container-high text-on-surface rounded-lg font-body-md text-body-md placeholder:text-outline-variant focus:outline-none focus:bg-surface-container-highest transition-all duration-200" id="clinical-id" placeholder="e.g. bio-id@veridis-labs.bio" required="" type="text" value="dr.elena.vance@veridis-labs.bio"/>
+<input class="w-full pl-10 pr-4 py-3 bg-surface-container-high text-on-surface rounded-lg font-body-md text-body-md placeholder:text-outline-variant focus:outline-none focus:bg-surface-container-highest transition-all duration-200" id="clinical-id" name="email" autocomplete="email" placeholder="Enter your email address" required="" type="email"/>
 </div>
 </div>
 <!-- Field 2: Cryptographic Password / Passkey -->
 <div class="flex flex-col gap-1.5 mt-2">
 <div class="flex justify-between items-center">
 <label class="font-label-mono text-label-mono text-on-surface uppercase tracking-wider" for="passkey-input">
-<span>ACCESS PASSKEY // CRYPTOGRAPHIC KEY</span>
+<span>PASSWORD</span>
 </label>
 <a class="font-label-mono-xs text-label-mono-xs text-secondary hover:text-primary-container transition-colors" href="#">FORGOT PASSKEY?</a>
 </div>
@@ -100,7 +100,7 @@
 <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-outline group-focus-within:text-primary-container transition-colors">
 <span class="material-symbols-outlined text-lg">terminal</span>
 </div>
-<input class="w-full pl-10 pr-11 py-3 bg-surface-container-high text-on-surface rounded-lg font-body-md text-body-md placeholder:text-outline-variant focus:outline-none focus:bg-surface-container-highest transition-all duration-200" id="passkey-input" placeholder="Enter cryptographic passkey" required="" type="password" value="••••••••••••••••••••"/>
+<input class="w-full pl-10 pr-11 py-3 bg-surface-container-high text-on-surface rounded-lg font-body-md text-body-md placeholder:text-outline-variant focus:outline-none focus:bg-surface-container-highest transition-all duration-200" id="passkey-input" name="password" autocomplete="current-password" placeholder="Enter your password" minlength="6" required="" type="password"/>
 <button class="absolute inset-y-0 right-0 pr-3 flex items-center text-outline hover:text-on-surface transition-colors" onclick="togglePasskeyVisibility()" title="Toggle visibility" type="button">
 <span class="material-symbols-outlined text-lg" id="passkey-toggle-icon">visibility</span>
 </button>
@@ -122,12 +122,27 @@
 </div>
 </div>
 </form>
+<!-- Google OAuth sign-in -->
+<div class="flex flex-col gap-3">
+  <button id="google-auth-btn" class="w-full flex items-center justify-center gap-3 px-4 py-3 rounded-lg border border-outline-variant bg-surface-container-high hover:bg-surface-container-highest transition-colors text-on-surface font-body-md" type="button">
+    <svg aria-hidden="true" width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.03 13.22l7.98 6.19C11.9 13.72 17.48 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.76 7.18l7.73 6C44.42 37.99 46.98 31.8 46.98 24.55z"/><path fill="#FBBC05" d="M10.01 28.59A14.4 14.4 0 0 1 9.23 24c0-1.59.27-3.13.76-4.59l-7.98-6.19A23.9 23.9 0 0 0 0 24c0 3.87.93 7.52 2.56 10.78l7.45-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.91-5.8l-7.73-6c-2.15 1.45-4.9 2.3-8.18 2.3-6.52 0-12.1-4.22-14.01-10.09l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+    <span>Continue with Google</span>
+  </button>
+  <p id="google-auth-help" class="text-center font-label-mono-xs text-outline">Secure sign-in powered by Supabase</p>
+</div>
+
 <!-- Rapid Optical / Biometric Access Partition -->
 <div class="flex items-center gap-3">
 <div class="flex-1 h-[1px] bg-surface-container-high"></div>
-<span class="font-label-mono-xs text-label-mono-xs text-outline uppercase tracking-wider">HARDWARE ATTENUATION</span>
+<span class="font-label-mono-xs text-label-mono-xs text-outline uppercase tracking-wider">OR CONTINUE WITH</span>
 <div class="flex-1 h-[1px] bg-surface-container-high"></div>
 </div>
+<!-- Google OAuth -->
+<button id="google-auth-btn" class="w-full flex items-center justify-center gap-3 px-4 py-3.5 rounded-lg border border-surface-variant bg-surface-container-high hover:bg-surface-container-highest transition-colors text-on-surface font-body-md text-body-md" type="button">
+  <svg aria-hidden="true" width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.74 7.18l7.66 5.94c4.48-4.14 7.12-10.24 7.12-17.59z"/><path fill="#FBBC05" d="M10.53 28.59A14.4 14.4 0 0 1 9.75 24c0-1.59.27-3.13.76-4.59l-7.98-6.19A23.9 23.9 0 0 0 0 24c0 3.87.93 7.52 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.9-5.81l-7.66-5.94c-2.13 1.43-4.86 2.27-8.24 2.27-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+  <span id="google-auth-label">Continue with Google</span>
+</button>
+<p class="text-center font-body-sm text-body-sm text-outline">Secure sign-in powered by Supabase Authentication.</p>
 <!-- Hardware & Biometric SSO Stack -->
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
 <!-- WebAuthn / FaceID Biometric Button -->
@@ -183,80 +198,116 @@
 </div>
 </div>
 <script>
+  let authMode = 'signin';
+  let supabaseClient = null;
+
+  function showAuthMessage(message, kind = 'info') {
+    const bar = document.getElementById('auth-status-bar');
+    if (!bar) return;
+    bar.classList.remove('hidden');
+    bar.classList.add('flex');
+    const color = kind === 'error' ? 'text-error' : (kind === 'success' ? 'text-primary-container' : 'text-secondary');
+    bar.innerHTML = `<span class="${color}" role="status">${message}</span>`;
+  }
+
+  function setBusy(busy, labelText) {
+    const btn = document.getElementById('auth-submit-btn');
+    const google = document.getElementById('google-auth-btn');
+    btn.disabled = busy;
+    google.disabled = busy;
+    btn.classList.toggle('opacity-60', busy);
+    google.classList.toggle('opacity-60', busy);
+    document.getElementById('submit-label').textContent = labelText;
+  }
+
   function togglePasskeyVisibility() {
     const input = document.getElementById('passkey-input');
     const icon = document.getElementById('passkey-toggle-icon');
-    if (input.type === 'password') {
-      input.type = 'text';
-      icon.textContent = 'visibility_off';
-    } else {
-      input.type = 'password';
-      icon.textContent = 'visibility';
+    const visible = input.type === 'password';
+    input.type = visible ? 'text' : 'password';
+    icon.textContent = visible ? 'visibility_off' : 'visibility';
+  }
+
+  function setMode(mode) {
+    authMode = mode;
+    const signin = document.getElementById('tab-signin');
+    const signup = document.getElementById('tab-signup');
+    const active = ['bg-surface-container-lowest', 'text-primary-container', 'shadow-md'];
+    const inactive = ['text-on-surface-variant'];
+    signin.classList.remove(...active, ...inactive);
+    signup.classList.remove(...active, ...inactive);
+    (mode === 'signin' ? signin : signup).classList.add(...active);
+    (mode === 'signin' ? signup : signin).classList.add(...inactive);
+    document.getElementById('submit-label').textContent = mode === 'signin' ? 'AUTHORIZE VAULT SESSION' : 'CREATE ACCOUNT';
+    document.getElementById('passkey-input').autocomplete = mode === 'signin' ? 'current-password' : 'new-password';
+    document.getElementById('auth-status-bar').classList.add('hidden');
+  }
+
+  function getSupabaseClient() {
+    if (supabaseClient) return supabaseClient;
+    const config = window.VERIDIS_SUPABASE_CONFIG;
+    if (!window.supabase || !window.supabase.createClient) throw new Error('Supabase library did not load. Refresh the page and try again.');
+    if (!config || !config.url || !config.anonKey || config.url.includes('PASTE_YOUR_') || config.anonKey.includes('PASTE_YOUR_')) {
+      throw new Error('Authentication is not configured yet. Add your Supabase Project URL and anon/publishable key in supabase-config.js.');
     }
+    supabaseClient = window.supabase.createClient(config.url, config.anonKey, {
+      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+    });
+    return supabaseClient;
   }
 
-  function triggerAuth() {
-    const statusBar = document.getElementById('auth-status-bar');
-    const submitBtn = document.getElementById('auth-submit-btn');
-    const label = document.getElementById('submit-label');
-    
-    statusBar.classList.remove('hidden');
-    submitBtn.classList.add('opacity-80', 'pointer-events-none');
-    label.textContent = 'VERIFYING SIGNATURE...';
+  document.getElementById('auth-form').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const email = document.getElementById('clinical-id').value.trim();
+    const password = document.getElementById('passkey-input').value;
+    setBusy(true, authMode === 'signin' ? 'SIGNING IN...' : 'CREATING ACCOUNT...');
+    showAuthMessage('Connecting securely to authentication service...');
+    try {
+      const client = getSupabaseClient();
+      const result = authMode === 'signin'
+        ? await client.auth.signInWithPassword({ email, password })
+        : await client.auth.signUp({ email, password, options: { emailRedirectTo: window.location.origin + '/Login.html' } });
+      if (result.error) throw result.error;
+      if (authMode === 'signup' && !result.data.session) {
+        setMode('signin');
+        showAuthMessage('Account created. Check your email for the confirmation link before signing in.', 'success');
+      } else {
+        showAuthMessage('Authentication successful. Opening VERIDIS...', 'success');
+        window.location.assign('/index.html');
+      }
+    } catch (error) {
+      showAuthMessage(escapeHtml(error.message || 'Sign-in failed. Please try again.'), 'error');
+    } finally {
+      setBusy(false, authMode === 'signin' ? 'AUTHORIZE VAULT SESSION' : 'CREATE ACCOUNT');
+    }
+  });
 
-    setTimeout(() => {
-      statusBar.innerHTML = `
-        <span class="flex items-center gap-1.5 text-primary-container">
-          <span class="material-symbols-outlined text-xs">check_circle</span>
-          <span>SESSION AUTHORIZED // REDIRECTING TO TELEMETRY STREAM</span>
-        </span>
-        <span class="text-primary-container">PORT 443 [OK]</span>
-      `;
-      label.textContent = 'ACCESS GRANTED';
-      submitBtn.classList.remove('opacity-80');
-    }, 1200);
+  document.getElementById('google-auth-btn').addEventListener('click', async () => {
+    setBusy(true, authMode === 'signin' ? 'AUTHORIZE VAULT SESSION' : 'CREATE ACCOUNT');
+    document.getElementById('google-auth-label').textContent = 'Connecting to Google...';
+    try {
+      const client = getSupabaseClient();
+      const { error } = await client.auth.signInWithOAuth({
+        provider: 'google',
+        options: { redirectTo: window.location.origin + '/index.html' }
+      });
+      if (error) throw error;
+    } catch (error) {
+      showAuthMessage(escapeHtml(error.message || 'Google sign-in could not start.'), 'error');
+      document.getElementById('google-auth-label').textContent = 'Continue with Google';
+      setBusy(false, authMode === 'signin' ? 'AUTHORIZE VAULT SESSION' : 'CREATE ACCOUNT');
+    }
+  });
+
+  function escapeHtml(value) {
+    return String(value).replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
   }
 
+  document.getElementById('tab-signin').addEventListener('click', () => setMode('signin'));
+  document.getElementById('tab-signup').addEventListener('click', () => setMode('signup'));
+
+  // The biometric button is a visual placeholder; it does not claim to authenticate a real biometric.
   function simulateBiometricAuth() {
-    const statusBar = document.getElementById('auth-status-bar');
-    statusBar.classList.remove('hidden');
-    statusBar.innerHTML = `
-      <span class="flex items-center gap-1.5 text-secondary">
-        <span class="material-symbols-outlined text-xs animate-spin">fingerprint</span>
-        <span>AWAITING WEBAUTHN BIO-TOUCH SENSOR PIN...</span>
-      </span>
-      <span class="text-secondary">FIDO2 ACTIVE</span>
-    `;
-
-    setTimeout(() => {
-      statusBar.innerHTML = `
-        <span class="flex items-center gap-1.5 text-primary-container">
-          <span class="material-symbols-outlined text-xs">verified</span>
-          <span>BIOMETRIC HASH CONFIRMED: DR. E. VANCE</span>
-        </span>
-        <span class="text-primary-container">VAULT READY</span>
-      `;
-    }, 1400);
+    showAuthMessage('This demo button is not connected to WebAuthn yet. Use email/password or Google sign-in.', 'info');
   }
-
-  // Tab toggling micro-interaction
-  const tabSignin = document.getElementById('tab-signin');
-  const tabSignup = document.getElementById('tab-signup');
-  const submitLabel = document.getElementById('submit-label');
-
-  tabSignin.addEventListener('click', () => {
-    tabSignin.classList.add('bg-surface-container-lowest', 'text-primary-container', 'shadow-md');
-    tabSignin.classList.remove('text-on-surface-variant');
-    tabSignup.classList.remove('bg-surface-container-lowest', 'text-primary-container', 'shadow-md');
-    tabSignup.classList.add('text-on-surface-variant');
-    submitLabel.textContent = 'AUTHORIZE VAULT SESSION';
-  });
-
-  tabSignup.addEventListener('click', () => {
-    tabSignup.classList.add('bg-surface-container-lowest', 'text-primary-container', 'shadow-md');
-    tabSignup.classList.remove('text-on-surface-variant');
-    tabSignin.classList.remove('bg-surface-container-lowest', 'text-primary-container', 'shadow-md');
-    tabSignin.classList.add('text-on-surface-variant');
-    submitLabel.textContent = 'INITIALIZE BIO-KEY & REGISTER';
-  });
-</script></main><script src="/site-interactions.js" defer></script></body></html>
+</script></main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="/supabase-config.js"></script><script src="/site-interactions.js" defer></script></body></html>
