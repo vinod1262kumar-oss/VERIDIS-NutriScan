@@ -15,6 +15,7 @@ const allowedFiles = [
   'auth.js',
   'navigation.js',
   'config.json',
+  'site-interactions.js',
 ];
 
 fs.rmSync(out, { recursive: true, force: true });
@@ -38,7 +39,7 @@ fs.writeFileSync(path.join(out, '_redirects'), [
   '/.env          /404.html         404',
   '/server.js     /404.html         404',
   '',
-].join('\\n'));
+].join('\n'));
 
 console.log('Netlify static build complete: dist/');
 console.log('Note: server.js is not deployed; configure a separate backend for real API endpoints.');
