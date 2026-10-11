@@ -3,4 +3,5 @@ dist/
 .env
 .env.*
 !.env.example
-.netlify/
+.DS_Store
+npm-debug.log*

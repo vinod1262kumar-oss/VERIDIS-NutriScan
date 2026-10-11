@@ -4,3 +4,8 @@
 
 [build.environment]
   NODE_VERSION = "20"
+
+[[headers]]
+  for = "/.env*"
+  [headers.values]
+    X-Robots-Tag = "noindex"
